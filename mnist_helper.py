@@ -9,23 +9,21 @@ import gzip
 
 import timeit
 
-
 class mnist:
     def __init__(self):
         self.dlhostname = "http://yann.lecun.com/exdb/mnist/"
         self.dlfilelist = ("train-images-idx3-ubyte.gz", "train-labels-idx1-ubyte.gz", "t10k-images-idx3-ubyte.gz", "t10k-labels-idx1-ubyte.gz")
         #self.lfilelist = ("mnist-train-images.txt", "mnist-train-labels.txt", "mnist-test-images.txt", "mnist-test-labels.txt")
         self.lfilelist = ("mnist-train-images", "mnist-train-labels", "mnist-test-images", "mnist-test-labels")
-        self.dldatadir = "./mnist/"
+        self.datapath = "./mnist/"
         self.LABEL_FILE = 2049
         self.IMAGE_FILE = 2051
         return
 
-    def download_raw_mnist(self, site=None, datadir=None, force_download = True):
+    def download_raw_mnist(self, site=None, force_download = True):
         if site is None:
             site = self.dlhostname
-        if datadir is None:
-            datadir = self.dldatadir
+        datadir = self.datapath
 
         if os.path.exists(datadir) is False:
             print("can't find data directory", datadir)
@@ -86,8 +84,9 @@ class mnist:
         return result
 
     # read raw files, expand labels to 1-hot, and save in numpy and/or text format
-    def inflate_mnist(self, datadir=None, txtformat=False):
+    def inflate_mnist(self, txtformat=False):
 
+        datadir = self.datapath
         for in_f, out_f in zip(self.dlfilelist, self.lfilelist):
             # read in raw file
             result = dict()
@@ -126,9 +125,8 @@ class mnist:
                 print("finished writing to file")
             #pass
 
-    def load_mnist(self, datadir=None, testset = False):
-        if datadir is None:
-            datadir = self.dldatadir
+    def load_mnist(self, testset = False):
+        datadir = self.datapath
 
         result = dict()
 
@@ -161,9 +159,10 @@ class mnist:
 if __name__ == '__main__':
     datadir = os.path.join(os.path.sep, "Users", "hjl", "Downloads", "mnist")
     m = mnist()
+    m.datapath = datadir
 #    m.download_raw_mnist(datadir=datadir)
-    m.inflate_mnist(datadir, txtformat=False)
-    result = m.load_mnist(datadir)
+    m.inflate_mnist(txtformat=False)
+    result = m.load_mnist()
     print(repr(result['data']))
 
 

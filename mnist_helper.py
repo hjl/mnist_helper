@@ -157,12 +157,28 @@ class mnist:
         return result
     
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+
     datadir = os.path.join(os.path.sep, "Users", "hjl", "Downloads", "mnist")
     m = mnist()
     m.datapath = datadir
-#    m.download_raw_mnist(datadir=datadir)
+#    m.download_raw_mnist()
     m.inflate_mnist(txtformat=False)
     result = m.load_mnist()
     print(repr(result['data']))
+
+    data = result['data'].reshape(60000,28,28)
+    plt.figure()
+    plt.subplot(3,2,1)
+    plt.imshow(data[0], 'gray_r')
+    plt.subplot(3,2,2)
+    plt.imshow(data[1], 'gray_r')
+
+#    plt.subplot(3,2,3)
+#    plt.imshow(data[2], 'gray_r')
+    plt.subplot(3,2,4)
+    plt.imshow(data[3], 'gray_r')
+
+    plt.show()
 
 
